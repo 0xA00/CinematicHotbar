@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "cinematichotbar",
+  "version": "${version}",
+  "name": "CinematicHotbar",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/lengthrequired/CinematicHotbar"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/CinematicHotbar/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "length.oxao.cinematichotbar.CinematicHotbar"
+    ]
+  },
+  "mixins": [
+    "CinematicHotbar.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
