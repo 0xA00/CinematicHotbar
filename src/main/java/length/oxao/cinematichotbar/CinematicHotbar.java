@@ -25,10 +25,13 @@ public class CinematicHotbar implements ModInitializer {
     public CinematicHotbar getInstance() {
         return INSTANCE;
     }
+    public static boolean  isHudHidden;
 
         @Override
     public void onInitialize() {
         if (INSTANCE == null) INSTANCE = this;
         this.isCinematicHotbaractivated = new setPropertiess().getProperty("CinematicHotbar");
+        isHudHidden = false;
+
     }
 }

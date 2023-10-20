@@ -7,7 +7,9 @@
   ],
   "client": [
     "GameMenuScreenMixin",
+    "GameRendererMixin",
     "inGameHudMixin",
+    "KeyBoardMixin",
     "MinecraftClientMixin"
   ],
   "injectors": {
