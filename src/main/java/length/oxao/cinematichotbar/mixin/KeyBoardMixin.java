@@ -1,6 +1,7 @@
 package length.oxao.cinematichotbar.mixin;
 
 
+import length.oxao.cinematichotbar.Timer;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -31,6 +32,9 @@ public class KeyBoardMixin {
             client.player.sendMessage(Text.of("§c§lhud is already hidden !"),true);
         }else {
             isHudHidden = !isHudHidden;
+            if (isHudHidden){
+                Timer.SetTimer(200);
+            }
 
             client.options.hudHidden = isHudHidden;
         }

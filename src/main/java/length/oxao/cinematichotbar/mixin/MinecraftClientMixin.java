@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static length.oxao.cinematichotbar.CinematicHotbar.fadeOut;
-
+import static length.oxao.cinematichotbar.CinematicHotbar.isHudHidden;
 
 
 @Mixin(MinecraftClient.class)
@@ -23,15 +23,16 @@ public class MinecraftClientMixin {
     private void tick(CallbackInfo ci) {
         boolean isCinematicHotbaractivated = new setPropertiess().getProperty("CinematicHotbar");
         if(isCinematicHotbaractivated) {
-          //  System.out.println(Timer.timer);
-            if (Timer.timer > 0) {
-                Timer.timer--;
+            if (!isHudHidden) {
+                //  System.out.println(Timer.timer);
+                if (Timer.timer > 0) {
+                    Timer.timer--;
+                }
+                if (Timer.timer == 0) {
+                    fadeOut = true;
+                    Timer.timer = -1;
+                }
             }
-            if (Timer.timer == 0) {
-                fadeOut = true;
-                Timer.timer = -1;
-            }
-
         }
         else {
             fadeOut = false;
