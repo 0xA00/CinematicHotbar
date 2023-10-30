@@ -1,19 +1,23 @@
 {
   "schemaVersion": 1,
-  "id": "cinematichotbar",
+  "id": "vanishedhotbar",
   "version": "${version}",
-  "name": "CinematicHotbar",
-  "description": "",
-  "authors": [],
+  "name": "Vanished Hotbar",
+  "description": "Vanished Hotbar is a mod that hides the hotbar when not in use after a certain time.",
+  "authors": ["0xA0"],
   "contact": {
-    "repo": "https://github.com/lengthrequired/CinematicHotbar"
+    "repo": "https://github.com/lengthrequired/CinematicHotbar",
+    "homepage": "https://modrinth.com/mod/cinematic-hotbar"
   },
   "license": "All-Rights-Reserved",
   "icon": "assets/CinematicHotbar/icon.png",
   "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "length.oxao.cinematichotbar.CinematicHotbar"
+    ],
+    "modmenu": [
+      "length.oxao.cinematichotbar.modmenuapi.VanishedHotbarModMenuInte"
     ]
   },
   "mixins": [
@@ -23,5 +27,20 @@
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "minecraft": "${minecraft_version}"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "GitHub": "https://github.com/0xA00/CinematicHotbar",
+        "Modrinth": "https://modrinth.com/mod/cinematic-hotbar"
+      },
+
+      "authors": [
+        "0xA0"
+        ],
+      "name": "Vanished Hotbar",
+        "license": "All-Rights-Reserved",
+      "update_checker": true
+    }
   }
 }

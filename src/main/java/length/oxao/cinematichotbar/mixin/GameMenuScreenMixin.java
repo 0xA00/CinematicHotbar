@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static length.oxao.cinematichotbar.CinematicHotbar.fadeOpacity;
 
 
 @Mixin(GameMenuScreen.class)
@@ -32,14 +33,15 @@ public abstract class GameMenuScreenMixin extends Screen {
 
     @Inject(at = @At("HEAD"), method = "initWidgets")
     private void initWidgets(CallbackInfo ci) {
-       ButtonWidget bW = new ButtonWidget.Builder(Text.of("CH: "+(isCinematicHotbaractivated?"✔":"X")),(buttonWidget) -> {
+        //put the button in the bottom right corner
+       ButtonWidget bW = new ButtonWidget.Builder(Text.of("Vanished Hotbar : "+(isCinematicHotbaractivated?"✔":"X")),(buttonWidget) -> {
            isCinematicHotbaractivated = !isCinematicHotbaractivated;
               new setPropertiess().setProperty("CinematicHotbar",isCinematicHotbaractivated);
-           System.out.println("CinematicHotbar is activated: " + isCinematicHotbaractivated);
 
            Timer.SetTimer(200);
-           buttonWidget.setMessage(Text.literal("CH: "+(isCinematicHotbaractivated?"✔":"X")));
-       }).dimensions(this.width/2-102-36,this.height/4+140-60,34,20)
+           fadeOpacity = 1.0F;
+           buttonWidget.setMessage(Text.literal("Vanished Hotbar : "+(isCinematicHotbaractivated?"✔":"X")));
+       }).dimensions(this.width-124,this.height-45,108,20)
                .tooltip(Tooltip.of(Text.literal("This Button switch between the fadeout hotbar and the normal once")))
                .build();
 

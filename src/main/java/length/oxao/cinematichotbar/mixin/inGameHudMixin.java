@@ -1,95 +1,108 @@
 package length.oxao.cinematichotbar.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import length.oxao.cinematichotbar.FadeMode;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.JumpingMount;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-
-import static length.oxao.cinematichotbar.CinematicHotbar.fadeOut;
+import static length.oxao.cinematichotbar.CinematicHotbar.*;
 
 @Mixin(InGameHud.class)
 public class inGameHudMixin extends DrawableHelper {
 
 
-    //inject and cancel render
-    @Inject(method = "renderHotbar",
-            at = @At(value="HEAD"),
-            cancellable = true)
-    private void renderHotbar(float tickDelta, MatrixStack matrices, CallbackInfo ci) {
-        if(fadeOut)
-            ci.cancel();
+    @Shadow @Final private ItemRenderer itemRenderer;
 
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbar(FLnet/minecraft/client/util/math/MatrixStack;)V"))
+    private void startHotbarTranslate(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        //blend color
+        DotheThingy();
     }
 
-    //inject and cancel render
-    @Inject(method = "renderMountJumpBar",
-            at = @At(value="HEAD"),
-            cancellable = true)
-    private void renderMountJumpBar(JumpingMount mount, MatrixStack matrices, int x, CallbackInfo ci) {
-        if(fadeOut)
-            ci.cancel();
-
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbar(FLnet/minecraft/client/util/math/MatrixStack;)V", shift = At.Shift.AFTER))
+    private void endHotbarTranslate(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        //blend color
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-
-    //inject and cancel render
-    @Inject(method = "renderCrosshair",
-            at = @At(value="HEAD"),
-            cancellable = true)
-    private void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
-        if(fadeOut)
-            ci.cancel();
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusBars(Lnet/minecraft/client/util/math/MatrixStack;)V"))
+    private void startStatusBarsTranslate(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        DotheThingy();
     }
 
-
-    @Inject(method = "renderStatusBars",
-            at = @At(value="HEAD"),
-            cancellable = true)
-    private void renderStatusBars(MatrixStack matrices, CallbackInfo ci) {
-        if(fadeOut)
-            ci.cancel();
+    private void DotheThingy() {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        if(fadeMode == FadeMode.FADE_OUT) {
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, fadeOpacity);
+        }
+        else if (fadeMode == FadeMode.FADE_IN){
+            if (fadeOpacity < 1.0F) {
+                fadeOpacity += 0.01F;
+            }
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, fadeOpacity);
+        }
+        else {
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
     }
 
-    //inject and cancel render
-    @Inject(method = "renderMountHealth",
-            at = @At(value="HEAD"),
-            cancellable = true)
-    private void renderMountHealth(MatrixStack matrices, CallbackInfo ci) {
-        if(fadeOut)
-            ci.cancel();
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusBars(Lnet/minecraft/client/util/math/MatrixStack;)V", shift = At.Shift.AFTER))
+    private void endStatusBarsTranslate(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
+
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderMountHealth(Lnet/minecraft/client/util/math/MatrixStack;)V"))
+    private void startMountHealthTranslate(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        DotheThingy();
     }
 
-
-
-    //inject and cancel render
-    @Inject(method = "renderExperienceBar",
-            at = @At(value="HEAD"),
-            cancellable = true)
-    private void renderExperienceBar(MatrixStack matrices, int x, CallbackInfo ci) {
-        if(fadeOut)
-            ci.cancel();
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderMountHealth(Lnet/minecraft/client/util/math/MatrixStack;)V", shift = At.Shift.AFTER))
+    private void endMountHealthTranslate(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    //inject and cancel render
-    @Inject(method = "renderHeldItemTooltip",
-            at = @At(value="HEAD"),
-            cancellable = true)
-    private void renderHeldItemTooltip(MatrixStack matrices, CallbackInfo ci) {
-        if(fadeOut)
-            ci.cancel();
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderMountJumpBar(Lnet/minecraft/entity/JumpingMount;Lnet/minecraft/client/util/math/MatrixStack;I)V"))
+    private void startMountJumpBarTranslate(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        DotheThingy();
     }
 
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderMountJumpBar(Lnet/minecraft/entity/JumpingMount;Lnet/minecraft/client/util/math/MatrixStack;I)V", shift = At.Shift.AFTER))
+    private void endMountJumpBarTranslate(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
 
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
 
+    // EXPERIENCE BAR
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderExperienceBar(Lnet/minecraft/client/util/math/MatrixStack;I)V"))
+    private void startExperienceBarTranslate(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        DotheThingy();
+    }
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderExperienceBar(Lnet/minecraft/client/util/math/MatrixStack;I)V", shift = At.Shift.AFTER))
+    private void endExperienceBarTranslate(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    @Inject(method = "renderHotbarItem", at = @At(value = "HEAD"), cancellable = true)
+    private void renderHotbarItem(MatrixStack matrixStack, int i, int j, float f, PlayerEntity playerEntity, ItemStack itemStack, int k, CallbackInfo ci) {
+        if (fadeOut && fadeOpacity< 0.35F) {
+            ci.cancel();
+        }
+    }
 
 
 

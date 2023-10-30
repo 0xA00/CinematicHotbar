@@ -33,7 +33,7 @@ public class KeyBoardMixin {
         }else {
             isHudHidden = !isHudHidden;
             if (isHudHidden){
-                Timer.SetTimer(200);
+                Timer.SetTimer(Timer.getTiming());
             }
 
             client.options.hudHidden = isHudHidden;

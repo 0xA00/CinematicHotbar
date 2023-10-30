@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static length.oxao.cinematichotbar.CinematicHotbar.fadeOut;
 import static length.oxao.cinematichotbar.CinematicHotbar.isHudHidden;
 
 @Mixin(GameRenderer.class)
@@ -26,6 +27,8 @@ public class GameRendererMixin {
         if (isHudHidden) {
             client.options.hudHidden = false;
         }
+
+
     }
 
     @Inject(method = "renderWorld", at = @At("TAIL"))

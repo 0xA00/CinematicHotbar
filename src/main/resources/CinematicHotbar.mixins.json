@@ -6,9 +6,9 @@
   "mixins": [
   ],
   "client": [
-    "GameMenuScreenMixin",
     "GameRendererMixin",
     "inGameHudMixin",
+    "ItemRendererMixin",
     "KeyBoardMixin",
     "MinecraftClientMixin"
   ],
